@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les catégories{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h1 class="h2 fw-bold mb-2">
+            <i class="bi bi-tags me-2 text-primary"></i>Toutes les catégories
+        </h1>
+        <p class="text-muted mb-0">Gérez vos catégories d'articles</p>
+    </div>
+    <a href="{{ path('add_category') }}" class="btn btn-primary btn-modern">
+        <i class="bi bi-plus-circle me-2"></i>Ajouter une catégorie
+    </a>
+</div>
+
+{% if categories is empty %}
+    <div class="glass-card p-5 text-center">
+        <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+        <h3 class="mt-3 mb-2">Aucune catégorie</h3>
+        <p class="text-muted mb-4">Commencez par ajouter votre première catégorie</p>
+        <a href="{{ path('add_category') }}" class="btn btn-primary btn-modern">
+            <i class="bi bi-plus-circle me-2"></i>Ajouter une catégorie
+        </a>
+    </div>
+{% else %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for categorie in categories|reverse %}
+            <div class="col">
+                <div class="card card-modern h-100">
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="mb-3 text-center">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" 
+                                 style="width: 80px; height: 80px;">
+                                <i class="bi bi-tag-fill text-primary" style="font-size: 2rem;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-1">{{ categorie.nomCategorie }}</h5>
+                            <small class="text-muted">#{{ categorie.id }}</small>
+                        </div>
+
+                        <div class="mt-auto d-flex gap-2">
+                            <a href="{{ path('category_edit', {id: categorie.id}) }}" 
+                               class="btn btn-sm btn-outline-primary flex-fill">
+                                <i class="bi bi-pencil me-1"></i>Modifier
+                            </a>
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger flex-fill"
+                                    onclick="confirmDelete({{ categorie.id }}, '{{ categorie.nomCategorie|e('js') }}', '{{ csrf_token('delete' ~ categorie.id) }}')">
+                                <i class="bi bi-trash me-1"></i>Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{# Delete Confirmation Modal #}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-card border-0">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer la catégorie <strong id="categoryName"></strong> ?</p>
+                <p class="text-muted small mb-0">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary btn-modern" data-bs-dismiss="modal">Annuler</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <input type="hidden" name="_token" id="deleteToken" value="">
+                    <button type="submit" class="btn btn-danger btn-modern">
+                        <i class="bi bi-trash me-2"></i>Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id, name, token) {
+        document.getElementById('categoryName').textContent = name;
+        const form = document.getElementById('deleteForm');
+        form.action = '{{ path('category_delete', {'id': '__ID__'}) }}'.replace('__ID__', id);
+        document.getElementById('deleteToken').value = token;
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+    }
+</script>
+{% endblock %}

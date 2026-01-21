@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+{% block navbar %}{% endblock %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center align-items-center min-vh-100 py-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="glass-card p-5">
+            <div class="text-center mb-4">
+                <div class="mb-3">
+                    <i class="bi bi-box-arrow-in-right text-primary" style="font-size: 4rem;"></i>
+                </div>
+                <h2 class="fw-bold mb-2">Bienvenue</h2>
+                <p class="text-muted mb-0">Connectez-vous à votre compte</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Erreur :</strong> {{ error.messageKey|trans(error.messageData, 'security') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
+            <form action="{{ path('app_login') }}" method="post" id="loginForm">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
+                <div class="form-floating-modern">
+                    <i class="bi bi-envelope input-icon"></i>
+                    <input 
+                        type="text" 
+                        id="username"
+                        name="_username" 
+                        class="form-control" 
+                        value="{{ last_username }}" 
+                        placeholder="votre@email.com"
+                        required 
+                        autofocus
+                    >
+                    <label for="username" class="ms-5">Adresse email</label>
+                </div>
+
+                <div class="form-floating-modern">
+                    <i class="bi bi-lock input-icon"></i>
+                    <input 
+                        type="password" 
+                        id="password"
+                        name="_password" 
+                        class="form-control" 
+                        placeholder="••••••••"
+                        required
+                    >
+                    <label for="password" class="ms-5">Mot de passe</label>
+                </div>
+
+                <div class="d-grid mb-4">
+                    <button type="submit" class="btn btn-primary btn-modern w-100" id="submitBtn">
+                        <span class="spinner-border spinner-border-sm d-none me-2" id="loadingSpinner" role="status"></span>
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        <span>Se connecter</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center pt-4 border-top">
+                <p class="text-muted mb-3">Vous n'avez pas de compte ?</p>
+                <a href="{{ path('app_registration') }}" class="btn btn-outline-primary btn-modern">
+                    <i class="bi bi-person-plus me-2"></i>Créer un compte
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form submission with loading state
+    document.getElementById('loginForm')?.addEventListener('submit', function() {
+        const btn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('loadingSpinner');
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+    });
+</script>
+{% endblock %}

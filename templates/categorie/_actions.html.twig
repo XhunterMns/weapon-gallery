@@ -1,0 +1,12 @@
+<div class="d-flex gap-2">
+    <a href="{{ path('category_edit', {id: categorie.id}) }}" class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-pencil"></i> Modifier
+    </a>
+
+    <form method="post" action="{{ path('category_delete', {id: categorie.id}) }}" onsubmit="return confirm('Supprimer la catégorie ?');" style="display:inline">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categorie.id) }}">
+        <button class="btn btn-sm btn-outline-danger" type="submit">
+            <i class="bi bi-trash"></i> Supprimer
+        </button>
+    </form>
+</div>

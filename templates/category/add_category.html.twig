@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une catégorie{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card p-4 p-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="h3 fw-bold mb-1">
+                        <i class="bi bi-plus-circle text-primary me-2"></i>
+                        Ajouter une catégorie
+                    </h2>
+                    <p class="text-muted small mb-0">Créez une nouvelle catégorie pour vos articles</p>
+                </div>
+                <a href="{{ path('show_all_categories') }}" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-2"></i>Retour
+                </a>
+            </div>
+
+            {{ form_start(f, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'id': 'categoryForm'}}) }}
+            
+            <div class="form-floating-modern">
+                <i class="bi bi-tag input-icon"></i>
+                {{ form_widget(f.nomCategorie, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom de la catégorie'}}) }}
+                {{ form_label(f.nomCategorie, null, {'label_attr': {'class': 'ms-5'}}) }}
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(f.nomCategorie) }}
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end gap-3 mt-4">
+                <a href="{{ path('show_all_categories') }}" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-x-circle me-2"></i>Annuler
+                </a>
+                {{ form_widget(f.valider, {'attr': {'class': 'btn btn-primary btn-modern'}}) }}
+            </div>
+            
+            {{ form_end(f) }}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form validation
+    const form = document.getElementById('categoryForm');
+    const input = form.querySelector('input[type="text"]');
+    
+    input.addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+        }
+    });
+    
+    form.addEventListener('submit', function(e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+</script>
+{% endblock %}

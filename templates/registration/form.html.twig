@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+{% block navbar %}{% endblock %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center align-items-center min-vh-100 py-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card p-5">
+            <div class="text-center mb-4">
+                <div class="mb-3">
+                    <i class="bi bi-person-plus text-primary" style="font-size: 4rem;"></i>
+                </div>
+                <h2 class="fw-bold mb-2">Créer un compte</h2>
+                <p class="text-muted mb-0">Rejoignez-nous dès aujourd'hui</p>
+            </div>
+
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'id': 'registrationForm'}}) }}
+            
+            <div class="form-floating-modern">
+                <i class="bi bi-envelope input-icon"></i>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'votre@email.com'}}) }}
+                {{ form_label(form.email, null, {'label_attr': {'class': 'ms-5'}}) }}
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(form.email) }}
+                </div>
+            </div>
+
+            <div class="form-floating-modern">
+                <i class="bi bi-lock input-icon"></i>
+                {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+                {{ form_label(form.plainPassword, null, {'label_attr': {'class': 'ms-5'}}) }}
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(form.plainPassword) }}
+                </div>
+            </div>
+
+            <div class="form-floating-modern">
+                <i class="bi bi-lock-fill input-icon"></i>
+                {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Confirmez le mot de passe'}}) }}
+                {{ form_label(form.password, null, {'label_attr': {'class': 'ms-5'}}) }}
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(form.password) }}
+                </div>
+            </div>
+
+            <div class="d-grid mb-4">
+                {{ form_widget(form.Register, {'attr': {'class': 'btn btn-primary btn-modern w-100', 'id': 'submitBtn'}}) }}
+            </div>
+
+            {{ form_end(form) }}
+
+            <div class="text-center pt-4 border-top">
+                <p class="text-muted mb-3">Vous avez déjà un compte ?</p>
+                <a href="{{ path('app_login') }}" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form validation with live feedback
+    const form = document.getElementById('registrationForm');
+    const inputs = form.querySelectorAll('input[required]');
+    
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.classList.contains('is-invalid') && this.value.trim() !== '') {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            }
+        });
+    });
+</script>
+{% endblock %}

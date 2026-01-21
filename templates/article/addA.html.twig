@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un article{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="glass-card p-4 p-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="h3 fw-bold mb-1">
+                        <i class="bi bi-plus-circle text-primary me-2"></i>
+                        {{ app.request.attributes.get('_route') == 'edit_user' ? 'Modifier' : 'Ajouter' }} un article
+                    </h2>
+                    <p class="text-muted small mb-0">Remplissez les informations ci-dessous</p>
+                </div>
+                <a href="{{ path('show_all_articles') }}" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-2"></i>Retour
+                </a>
+            </div>
+
+            {{ form_start(f, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'id': 'articleForm'}}) }}
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="form-floating-modern">
+                        <i class="bi bi-tag input-icon"></i>
+                        {{ form_widget(f.libelle, {'attr': {'class': 'form-control', 'placeholder': "Nom de l'article"}}) }}
+                        {{ form_label(f.libelle, null, {'label_attr': {'class': 'ms-5'}}) }}
+                        <div class="invalid-feedback d-block">
+                            {{ form_errors(f.libelle) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating-modern">
+                        <i class="bi bi-award input-icon"></i>
+                        {{ form_widget(f.marque, {'attr': {'class': 'form-control', 'placeholder': 'Marque'}}) }}
+                        {{ form_label(f.marque, null, {'label_attr': {'class': 'ms-5'}}) }}
+                        <div class="invalid-feedback d-block">
+                            {{ form_errors(f.marque) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="form-floating-modern">
+                        <i class="bi bi-currency-euro input-icon"></i>
+                        {{ form_widget(f.price, {'attr': {'class': 'form-control', 'placeholder': '0.00'}}) }}
+                        {{ form_label(f.price, null, {'label_attr': {'class': 'ms-5'}}) }}
+                        <div class="invalid-feedback d-block">
+                            {{ form_errors(f.price) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating-modern">
+                        <label class="form-label fw-bold mb-3 d-block">
+                            <i class="bi bi-toggle-on me-2"></i>{{ form_label(f.disponile) }}
+                        </label>
+                        <div class="form-check form-switch form-switch-lg">
+                            {{ form_widget(f.disponile, {'attr': {'class': 'form-check-input', 'role': 'switch'}}) }}
+                        </div>
+                        <div class="invalid-feedback d-block">
+                            {{ form_errors(f.disponile) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating-modern">
+                <i class="bi bi-tags input-icon"></i>
+                {{ form_widget(f.categorie, {'attr': {'class': 'form-select'}}) }}
+                {{ form_label(f.categorie, null, {'label_attr': {'class': 'ms-5'}}) }}
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(f.categorie) }}
+                </div>
+            </div>
+
+            <div class="form-floating-modern">
+                <i class="bi bi-image input-icon"></i>
+                {{ form_widget(f.imageUrl, {'attr': {'class': 'form-control', 'placeholder': 'https://example.com/image.jpg'}}) }}
+                {{ form_label(f.imageUrl, null, {'label_attr': {'class': 'ms-5'}}) }}
+                <small class="form-text text-muted ms-5 mt-1 d-block">
+                    <i class="bi bi-info-circle me-1"></i>URL de l'image (optionnel)
+                </small>
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(f.imageUrl) }}
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 mt-4">
+                <a href="{{ path('show_all_articles') }}" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-x-circle me-2"></i>Annuler
+                </a>
+                {{ form_widget(f.Valider, {'attr': {'class': 'btn btn-primary btn-modern'}}) }}
+            </div>
+
+            {{ form_end(f) }}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Live form validation
+    const form = document.getElementById('articleForm');
+    const inputs = form.querySelectorAll('input[required], select[required]');
+    
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() === '' && this.hasAttribute('required')) {
+                this.classList.add('is-invalid');
+            } else if (this.value.trim() !== '') {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            }
+        });
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+</script>
+{% endblock %}
